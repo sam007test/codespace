@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  webtop:
+    build:
+      context: .
+      dockerfile: webtop.Dockerfile
+    container_name: webtop
+    ports:
+      - "8080:3000" # Webtop primary interface
+      - "8081:3001" # Secondary web interface
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: Etc/UTC
+    volumes:
+      - ./config:/config
+    restart: unless-stopped
+
+  node1:
+    build:
+      context: .
+      dockerfile: node.Dockerfile
+    container_name: node1
+    ports:
+      - "7681:7681" # Web terminal for Node1
+      - "22:22"     # SSH access for Node1
+    restart: unless-stopped
